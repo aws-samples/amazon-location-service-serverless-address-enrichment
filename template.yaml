@@ -1,0 +1,172 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Serverless pipeline for Address Validation with AWS Location Service 
+
+Globals: 
+  Function:
+    Runtime: python3.9
+    MemorySize: 128
+    Timeout: 15
+
+Parameters:
+  LocationIndexName:
+    Type: String
+  InputBucketName:
+    Type: String
+  RawBucketName:
+    Type: String
+  ProcessedBucketName:
+    Type: String 
+  DestinationBucketName:
+    Type: String 
+
+
+Resources: 
+
+#######################################
+#  Create an AWS Location PlaceIndex  #
+#######################################
+  AmazonLocationIndex:  
+    Type: AWS::Location::PlaceIndex
+    Properties: 
+      DataSource: Esri
+      #DataSourceConfiguration: 
+       # DataSourceConfiguration
+      Description: Place index for Amazon Location Service Using Esri
+      IndexName: !Ref LocationIndexName
+      PricingPlan: RequestBasedUsage
+
+########################################
+#  S3 Buckets                          #
+########################################
+
+  InputBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref InputBucketName
+  RawBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref RawBucketName
+  ProcessedBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref ProcessedBucketName
+  DestinationBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref DestinationBucketName
+
+########################################
+#   Lambda Functions                   #
+########################################
+
+  scatter:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: scatterfunction/
+      Handler: scatter.lambda_handler
+      Description: Takes object inputed to InputBucket, shards into X number of files, and puts those files into the RawBucket
+      Environment:
+        Variables:
+          INPUT_BUCKET: !Ref InputBucketName
+          RAW_SHARDS_BUCKET: !Ref RawBucketName
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref InputBucketName
+        - S3WritePolicy:
+            BucketName: !Ref RawBucketName
+      Events:
+        FileUpload:
+          Type: S3
+          Properties:
+            Bucket: !Ref InputBucket
+            Events: s3:ObjectCreated:Put
+            Filter: 
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value: '.csv'
+
+  2waygeocoder:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: 2waygeocoderfunction/
+      Handler: 2waygeocoder.lambda_handler
+      Description: Takes object from RawDataShards bucket, processes those shards in parrallel, and puts shards into Processed Shards bucket
+      MemorySize: 256
+      Timeout: 900
+      Environment:
+        Variables: 
+          RAW_SHARDS_BUCKET: !Ref RawBucketName
+          PROCESSED_SHARDS_BUCKET: !Ref ProcessedBucketName
+          LOCATION_INDEX: !Ref LocationIndexName
+      Policies: 
+        - S3ReadPolicy:
+            BucketName: !Ref RawBucketName
+        - S3WritePolicy: 
+            BucketName: !Ref ProcessedBucketName
+        - Version: '2012-10-17' 
+          Statement:
+              #The following stanzas are required to invoke nested workflows 
+            - Effect: Allow
+              Action: 
+                - geo:SearchPlaceIndexForText
+                - geo:SearchPlaceIndexForPosition
+              Resource: "*"
+      Events:
+        FileUpload:
+          Type: S3
+          Properties:
+            Bucket: !Ref RawBucket
+            Events: s3:ObjectCreated:Put
+
+  gather:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: gatherfunction/
+      Handler: gather.lambda_handler
+      Description: Takes objects from processed data shards once the last file is PUT, appends them together to create a single final dataset
+      Environment: 
+        Variables:
+          PROCESSED_SHARDS_BUCKET: !Ref ProcessedBucketName
+          DESTINATION_BUCKET: !Ref DestinationBucketName
+      Policies: 
+        - S3ReadPolicy:
+            BucketName: !Ref ProcessedBucketName
+        - S3WritePolicy:
+            BucketName: !Ref DestinationBucketName
+      Events:
+        FileUpload:
+          Type: S3
+          Properties:
+            Bucket: !Ref ProcessedBucket
+            Events: s3:ObjectCreated:Put
+            Filter: 
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value: 'LAST.csv'
+
+Outputs:
+  InputBucket:
+    Value: !Ref InputBucketName
+    Description: S3 Bucket for .csv file input
+  RawBucket:
+    Value: !Ref RawBucketName
+    Description: S3 bucket for output from scatter function
+  ProcessedBucket:
+    Value: !Ref ProcessedBucketName
+    Description: S3 bucket for output from 2waygeocoder function, input for gather function
+  DestinationBucket:
+    Value: !Ref DestinationBucketName
+    Description: S3 bucket for output from gather function
+  FunctionArn:
+    Value: scatter
+    Description: scatter function ARN
+  FunctionArn:
+    Value: 2waygeocoder
+    Description: 2waygeocoder function ARN
+  FunctionArn:
+    Value: gather
+    Description: gather function ARN

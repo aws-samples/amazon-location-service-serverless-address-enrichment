@@ -1,11 +1,6 @@
-## My Project
+## Amazon Location Service Serverless Address Validation 
 
-TODO: Fill this README out!
-
-Be sure to:
-
-* Change the title in this README
-* Edit your repository description on GitHub
+This repository contains a SAM tempalte and code for deploying a Serverless Address Validation pipeline using S3, Lambda, and Amazon Location Service.
 
 ## Security
 

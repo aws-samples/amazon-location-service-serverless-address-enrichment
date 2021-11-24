@@ -18,6 +18,13 @@ To use the SAM CLI, you need the following tools:
  - SAM CLI - [Install the SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
 
 
+## Testing the Application
+
+Sample dataset for goecoding: https://catalog.data.gov/dataset/city-of-hartford-business-listing
+
+Sample dataset for reverse-geocoding: https://catalog.data.gov/dataset/nypd-shooting-incident-data-historic
+
+
 ## Security
 
 See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.

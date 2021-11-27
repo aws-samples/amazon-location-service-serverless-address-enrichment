@@ -94,7 +94,7 @@ Resources:
       CodeUri: 2waygeocoderfunction/
       Handler: 2waygeocoder.lambda_handler
       Description: Takes object from RawDataShards bucket, processes those shards in parrallel, and puts shards into Processed Shards bucket
-      MemorySize: 256
+      MemorySize: 128
       Timeout: 900
       Environment:
         Variables: 

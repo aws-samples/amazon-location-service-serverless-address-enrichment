@@ -5,6 +5,7 @@ import boto3
 import pandas as pd
 import io
 import os
+import urllib.parse
 
 ###  This function takes a raw data shard from the "raw" bucket, 
 ###  uses AWS Locations to GeoCode/ReverseGeoCode based on the columns in the datasets, 
@@ -19,7 +20,7 @@ def lambda_handler(event, context):
     #     Get Pre-Processed Shard from S3 via a triggered GET      #
     ################################################################
     bucket_name = event["Records"][0]["s3"]["bucket"]["name"]
-    s3_file_key = event["Records"][0]["s3"]["object"]["key"]
+    s3_file_key = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'], encoding='utf-8') 
     response = s3_client.get_object(Bucket=bucket_name, Key=s3_file_key)
     status = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
     if status == 200:
@@ -51,7 +52,7 @@ def lambda_handler(event, context):
                     Country = (json_response[0]["Place"]["Country"])
                     Countries.append(Country)
                 except:
-                    Country.append(0)
+                    Countries.append(0)
                 try:
                     Zipcode = (json_response[0]["Place"]["PostalCode"])
                     Zipcodes.append(Zipcode)
@@ -122,7 +123,7 @@ def lambda_handler(event, context):
                     Country = (json_response[0]["Place"]["Country"])
                     Countries.append(Country)
                  except:
-                    Country.append(0)
+                    Countries.append(0)
                  try:
                     Point = (json_response[0]["Place"]["Geometry"]["Point"])
                     Points.append(Point)
@@ -185,7 +186,7 @@ def lambda_handler(event, context):
                     Country = (json_response[0]["Place"]["Country"])
                     Countries.append(Country)
                 except:
-                    Country.append(0)
+                    Countries.append(0)
                 try:
                     Point = (json_response[0]["Place"]["Geometry"]["Point"])
                     Points.append(Point)
@@ -248,7 +249,7 @@ def lambda_handler(event, context):
                     Country = (json_response[0]["Place"]["Country"])
                     Countries.append(Country)
                 except:
-                    Country.append(0)
+                    Countries.append(0)
                 try:
                     Point = (json_response[0]["Place"]["Geometry"]["Point"])
                     Points.append(Point)

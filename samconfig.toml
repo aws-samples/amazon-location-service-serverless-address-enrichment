@@ -1,0 +1,12 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "sam-app-lucky"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-f4srfgk7semr"
+s3_prefix = "sam-app-lucky"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+image_repositories = []
+parameter_overrides = "LocationIndexName=\"address-lucky\" InputBucketName=\"input-lucky\" RawBucketName=\"raw-lucky\" ProcessedBucketName=\"processed-lucky\" DestinationBucketName=\"destination-lucky\""

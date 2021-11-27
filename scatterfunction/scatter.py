@@ -51,9 +51,9 @@ def lambda_handler(event, context):
                     print(f"Unsuccessful S3 put_object response. Status - {status}")
             print(number_of_shards)
             print(count)
-        # wait 10 seconds, then take the last shard and write it to S3 with a unique suffix identifier of "_SHARD_LAST"
+        # wait 5 seconds, then take the last shard and write it to S3 with a unique suffix identifier of "_SHARD_LAST"
         else:
-            time.sleep(10)
+            time.sleep(5)
             with io.StringIO() as csv_buffer:
                 shards[-1].to_csv(csv_buffer, index=False)
                 response = s3_client.put_object(

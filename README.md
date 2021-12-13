@@ -20,10 +20,10 @@ To use the SAM CLI, you need the following tools:
   - An [AWS Identity and Access Managment](https://aws.amazon.com/iam/) role with appropriate access
 
 ### 2. This Sample Includes: 
-  - template.yaml: Contains the AWS SAM template that defines you applications AWS resources, which includes a Place Index for Amazon Location Service
-  - scatterfunction/: Contains the Lambda handler logic behind the scatter function and its requirements 
-  - 2waygeocoderfunction/: Contains the Lambda handler logic for the processor function which calls the Amazon Location Service Places API to perform address   validation
-  - gatherfunction/: Contains the Lambda handler logic for the gather function which appends all of processed data into a complete dataset
+  - *template.yaml*: Contains the AWS SAM template that defines you applications AWS resources, which includes a Place Index for Amazon Location Service
+  - *scatterfunction/*: Contains the Lambda handler logic behind the scatter function and its requirements 
+  - *2waygeocoderfunction/*: Contains the Lambda handler logic for the processor function which calls the Amazon Location Service Places API to perform address   validation
+  - *gatherfunction/*: Contains the Lambda handler logic for the gather function which appends all of processed data into a complete dataset
 
 ![image](https://user-images.githubusercontent.com/73195085/145860614-bcba2ffd-4dca-41fe-843e-0cb616d5f018.png)
 

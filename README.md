@@ -35,7 +35,7 @@ To use the SAM CLI, you need the following tools:
 ![Screen Shot 2021-12-13 at 3 02 51 PM](https://user-images.githubusercontent.com/73195085/145883002-b2570833-c2ff-406a-9402-b23c2a366dd0.png)
 
 
-5. Use `sam deploy --guided` to deploy the application to your AWS account. Enter values for the application parameters. 
+4. Use `sam deploy --guided` to deploy the application to your AWS account. Enter values for the application parameters. 
     
      - NOTE: be sure to follow [S3 naming conventions](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html) by providing globally unique names for your s3 buckets such as input-YOURNAME raw-YOUR-PHONE-NUMBER or destination-YOUR-AWS-ACCOUNT-ID. See below for an example.
 

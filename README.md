@@ -27,7 +27,7 @@ To use the SAM CLI, you need the following tools:
   - *2waygeocoderfunction/*: Contains the Lambda handler logic for the processor function which calls the Amazon Location Service Places API to perform address   validation
   - *gatherfunction/*: Contains the Lambda handler logic for the gather function which appends all of processed data into a complete dataset
 
-### Deploy Sam-App:
+### Deploy the Sam-App:
 1. Use `git clone https://github.com/aws-samples/amazon-location-service-serverless-address-validation` to clone the repository to your environment where AWS SAM and python are installed.
 2. Use ``cd ~/environment/amazon-location-service-serverless-address-validation``to change into the project directory containing the template.yaml file SAM uses to build your application. 
 3. Use ``sam build`` to build your application using SAM. You should see:

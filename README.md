@@ -3,7 +3,8 @@
 This repository contains a SAM tempalte and code for deploying a Serverless Address Validation pipeline using S3, Lambda, and Amazon Location Service.
 
 ## Highlevel Architecture
-<img width="891" alt="Architecture" src=![Screen Shot 2021-12-09 at 12 08 50 PM](https://user-images.githubusercontent.com/73195085/145862620-6b0d7cf4-3758-401c-a2fd-ed9e59ccaa86.png)>
+![Screen Shot 2021-12-09 at 12 08 50 PM](https://user-images.githubusercontent.com/73195085/145862737-42331c9c-ccee-4553-b915-6bb27bb39a30.png)
+
 
 
   1.	The *Scatter* Lambda function takes a data set from the S3 bucket labeled *input* and breaks it into equal sized shards. 

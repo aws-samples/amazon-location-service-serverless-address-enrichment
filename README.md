@@ -30,12 +30,14 @@ To use the SAM CLI, you need the following tools:
 ### Deploy Sam-App:
 1. Use `git clone https://github.com/aws-samples/amazon-location-service-serverless-address-validation` to clone the repository to your environment where AWS SAM and python are installed.
 2. Use ``cd ~/environment/amazon-location-service-serverless-address-validation``to change into the project directory containing the template.yaml file SAM uses to build your application. 
-3. Use ``sam build`` to build your application using SAM. You should see 
-4. Use `sam deploy --guided` to deploy the application to your AWS account. 
-5. Input names for the application parameters. Provide a globally unique name for your s3 buckets such as input-YOURNAME raw-YOUR PHONE NUMBER- or destination-YOUR AWS ACCOUNT ID-. See below for an example:
+3. Use ``sam build`` to build your application using SAM. You should see:
+![build_succeeded](https://user-images.githubusercontent.com/73195085/145882809-1523b014-5584-499d-a03c-71ceb8f23820.png)
 
-  ![image](https://user-images.githubusercontent.com/73195085/145865103-2677a8e0-8c9c-4a0a-8ae0-db11a3831a59.png)
 
+5. Use `sam deploy --guided!` to deploy the application to your AWS account. 
+6. Input names for the application parameters. Provide a globally unique name for your s3 buckets such as input-YOURNAME raw-YOUR PHONE NUMBER- or destination-YOUR AWS ACCOUNT ID-. See below for an example:
+
+![Screen Shot 2021-12-13 at 3 14 53 PM](https://user-images.githubusercontent.com/73195085/145882895-0284be51-3890-468d-80cc-7ffe55ca18e8.png)
 
 
 

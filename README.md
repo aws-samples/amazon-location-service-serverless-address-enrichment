@@ -48,8 +48,8 @@ To use the SAM CLI, you need the following tools:
 Sample dataset for GeoCoding: City of Hartford, CT Business Listing Dataset
  - https://catalog.data.gov/dataset/city-of-hartford-business-listing
 
-Sample dataset for Reverse-GeoCoding: NYPD Shooting Incident Data (Historic) Dataset
- - https://catalog.data.gov/dataset/nypd-shooting-incident-data-historic
+Sample dataset for Reverse-GeoCoding: Miami Housing Dataset
+ - https://www.kaggle.com/deepcontractor/miami-housing-dataset
 
 
 ## Security

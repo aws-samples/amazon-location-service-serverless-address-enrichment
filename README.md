@@ -29,7 +29,7 @@ To use the SAM CLI, you need the following tools:
 
 ### Deploy the Sam-App:
 1. Use `git clone https://github.com/aws-samples/amazon-location-service-serverless-address-validation` to clone the repository to your environment where AWS SAM and python are installed.
-2. Use ``cd ~/environment/amazon-location-service-serverless-address-validation``to change into the project directory containing the template.yaml file SAM uses to build your application. 
+2. Use ``cd ~/amazon-location-service-serverless-address-validation``to change into the project directory containing the template.yaml file SAM uses to build your application. 
 3. Use ``sam build`` to build your application using SAM. You should see:
 
 ![Screen Shot 2021-12-13 at 3 02 51 PM](https://user-images.githubusercontent.com/73195085/145883002-b2570833-c2ff-406a-9402-b23c2a366dd0.png)
@@ -45,10 +45,13 @@ To use the SAM CLI, you need the following tools:
 
 ## Testing the Application
 
-Link to download sample dataset for GeoCoding: *City of Hartford, CT Business Listing Dataset*
- - https://catalog.data.gov/dataset/city-of-hartford-business-listing
+Link to download sample dataset for GeoCoding and Reverse Goeocoding: 
 
-Link to download sample dataset for Reverse-GeoCoding: *Miami Housing Dataset*
+Download the below samples locally, unzip the files, and upload the CSV to your *input S3 bucket* to trigger the adddress validation pipeline.
+
+Geocoding: *City of Hartford, CT Business Listing Dataset*
+ - https://catalog.data.gov/dataset/city-of-hartford-business-listing
+Reverse Geocoding: *Miami Housing Dataset*
  - https://www.kaggle.com/deepcontractor/miami-housing-dataset
 
 

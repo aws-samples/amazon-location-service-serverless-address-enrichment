@@ -47,8 +47,6 @@ To use the SAM CLI, you need the following tools:
 
 Download the below samples locally, unzip the files, and upload the CSV to your *input S3 bucket* to trigger the adddress validation pipeline.
 
-Link to download sample dataset for GeoCoding and Reverse Goeocoding: 
-
 Geocoding: *City of Hartford, CT Business Listing Dataset*
  - https://catalog.data.gov/dataset/city-of-hartford-business-listing
  

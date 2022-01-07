@@ -1,6 +1,6 @@
 # Serverless Address Validation with Amazon Location Service
 
-This repository contains a SAM tempalte and code for deploying a Serverless Address Validation pipeline using S3, Lambda, and Amazon Location Service.
+This repository accompanies a post from the AWS Compute Compute Blog [*Validating addresses with AWS Lambda and the Amazon Location Service*](https://aws.amazon.com/blogs/compute/validating-addresses-with-aws-lambda-and-the-amazon-location-service/). The repository contains a SAM tempaltefor deploying a Serverless Address Validation pipeline using Amazon S3, AWS Lambda, and Amazon Location Service.
 
 ## Highlevel Architecture
 ![Screen Shot 2021-12-09 at 12 08 50 PM](https://user-images.githubusercontent.com/73195085/145862737-42331c9c-ccee-4553-b915-6bb27bb39a30.png)

@@ -39,8 +39,7 @@ To use the SAM CLI, you need the following tools:
     
      - NOTE: be sure to follow [S3 naming conventions](https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucketnamingrules.html) by providing globally unique names for your s3 buckets such as input-YOURNAME raw-YOUR-PHONE-NUMBER or destination-YOUR-AWS-ACCOUNT-ID. See below for an example.
 
-![Screen Shot 2021-12-13 at 3 15 11 PM](https://user-images.githubusercontent.com/73195085/145884914-24c65002-cde4-400c-8cbb-a4bd3914f86d.png)
-
+![Screen Shot 2021-12-13 at 3 15 11 PM](<img width="1292" alt="Screen Shot 2022-01-07 at 2 14 24 PM" src="https://user-images.githubusercontent.com/73195085/148595475-5bb69f77-191e-49be-b3bc-d524d005b018.png">)
 
 
 ## Testing the Application

@@ -26,6 +26,7 @@ def lambda_handler(event, context):
     if status == 200:
         print(f"Successful S3 get_object response. Status - {status}")
         data = pd.read_csv(response.get("Body")).dropna(thresh=2)
+        data = data.rename(columns=str.title)
         columns = data.columns
         Countries = []
         Points = []

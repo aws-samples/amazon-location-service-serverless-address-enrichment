@@ -1,6 +1,6 @@
-# Serverless Address Validation with Amazon Location Service
+# Serverless Address Enrichment with Amazon Location Service
 
-This repository accompanies a post from the AWS Compute Compute Blog [*Validating addresses with AWS Lambda and the Amazon Location Service*](https://aws.amazon.com/blogs/compute/validating-addresses-with-aws-lambda-and-the-amazon-location-service/). The repository contains a SAM tempalte for deploying a Serverless Address Validation pipeline using Amazon S3, AWS Lambda, and Amazon Location Service.
+This repository accompanies a post from the AWS Compute Compute Blog [*Enriching addresses with AWS Lambda and the Amazon Location Service*](https://aws.amazon.com/blogs/compute/validating-addresses-with-aws-lambda-and-the-amazon-location-service/). The repository contains a SAM tempalte for deploying a Serverless Address Validation pipeline using Amazon S3, AWS Lambda, and Amazon Location Service.
 
 ## Highlevel Architecture
 ![Screen Shot 2021-12-09 at 12 08 50 PM](https://user-images.githubusercontent.com/73195085/145862737-42331c9c-ccee-4553-b915-6bb27bb39a30.png)
@@ -8,7 +8,7 @@ This repository accompanies a post from the AWS Compute Compute Blog [*Validatin
 
 
   1.	The *Scatter* Lambda function takes a data set from the S3 bucket labeled *input* and breaks it into equal sized shards. 
-  2.	The *Process* Lambda function takes each shard from the *pre-processed* bucket and performs Address Validation in parallel calling the [Amazon Location Service Places API](https://docs.aws.amazon.com/location-places/latest/APIReference/Welcome.html)
+  2.	The *Process* Lambda function takes each shard from the *pre-processed* bucket and performs Address Enrichment in parallel calling the [Amazon Location Service Places API](https://docs.aws.amazon.com/location-places/latest/APIReference/Welcome.html)
   3.	The *Gather* Lambda function takes each shard from the *post-processed* bucket and appends them into a complete dataset with additional address information.
 
 
@@ -24,7 +24,7 @@ To use the SAM CLI, you need the following tools:
 ### This Sample Includes: 
   - *template.yaml*: Contains the AWS SAM template that defines you applications AWS resources, which includes a Place Index for Amazon Location Service
   - *scatterfunction/*: Contains the Lambda handler logic behind the scatter function and its requirements 
-  - *2waygeocoderfunction/*: Contains the Lambda handler logic for the processor function which calls the Amazon Location Service Places API to perform address   validation
+  - *2waygeocoderfunction/*: Contains the Lambda handler logic for the processor function which calls the Amazon Location Service Places API to perform address enrichment
   - *gatherfunction/*: Contains the Lambda handler logic for the gather function which appends all of processed data into a complete dataset
 
 ### Deploy the Sam-App:

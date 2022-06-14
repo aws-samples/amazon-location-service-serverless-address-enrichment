@@ -37,6 +37,7 @@ def lambda_handler(event, context):
         SubRegions = []
         Municipalities = []
         Zipcodes = []
+        Relevances = []
         ###########################
         #     ReverseGeocoder     #
         ###########################
@@ -163,6 +164,12 @@ def lambda_handler(event, context):
                  except:
                     SubRegions.append(0)
                     print("Error: SubRegion unavailable for given input in row", (len(Points)) + 1)
+                 try:
+                    Relevance = (json_response[0]["Relevance"])
+                    Relevances.append(Relevance)
+                 except:
+                    Relevances.append(0)
+                    print("Error: Relevance unavailable for given input in row", (len(Points)) + 1)
     
             data["Points"] = Points
             data["Country"] = Countries
@@ -172,7 +179,7 @@ def lambda_handler(event, context):
             data["Municipality"] = Municipalities
             data["Region"] = Regions
             data["SubRegion"] = SubRegions
-    
+            data["Relevance"] = Relevances
         elif "Street" in columns:
             for index, row in data.iterrows():
                 try:
@@ -226,6 +233,12 @@ def lambda_handler(event, context):
                 except:
                     SubRegions.append(0)
                     print("Error: SubRegion unavailable for given input in row", (len(Points)) + 1)
+                try:
+                    Relevance = (json_response[0]["Relevance"])
+                    Relevances.append(Relevance)
+                except:
+                    Relevances.append(0)
+                    print("Error: Relevance unavailable for given input in row", (len(Points)) + 1)
     
             data["Points"] = Points
             data["Country"] = Countries
@@ -235,6 +248,7 @@ def lambda_handler(event, context):
             data["Municipality"] = Municipalities
             data["Region"] = Regions
             data["SubRegion"] = SubRegions
+            data["Relevance"] = Relevances
         elif "City" and "State" in columns:
             for index, row in data.iterrows():
                 try:
@@ -289,6 +303,12 @@ def lambda_handler(event, context):
                 except:
                     SubRegions.append(0)
                     print("Error: SubRegion unavailable for given input in row", (len(Points)) + 1)
+                try:
+                    Relevance = (json_response[0]["Relevance"])
+                    Relevances.append(Relevance)
+                except:
+                    Relevances.append(0)
+                    print("Error: Relevance unavailable for given input in row", (len(Points)) + 1)
     
             data["Points"] = Points
             data["Country"] = Countries
@@ -298,6 +318,7 @@ def lambda_handler(event, context):
             data["Municipality"] = Municipalities
             data["Region"] = Regions
             data["SubRegion"] = SubRegions
+            data["Relevance"] = Relevances
         ################################################## 
         #     Write processed shard to S3 via a PUT      #
         ##################################################

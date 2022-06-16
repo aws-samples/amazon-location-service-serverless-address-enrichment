@@ -33,6 +33,8 @@ def lambda_handler(event, context):
         Latitude = []
         Longitude = []
         Labels = []
+        AddressNumbers = []
+        Streets = []
         Regions = []
         SubRegions = []
         Municipalities = []
@@ -80,6 +82,16 @@ def lambda_handler(event, context):
                     Labels.append("")
                     print("Error: Address unavailable for given input in row", (len(Points)) + 1)
                 try:
+                    AddressNumber = (json_response[0]["Place"]["AddressNumber"])
+                    AddressNumbers.append(AddressNumber)
+                except:
+                    AddressNumbers.append("")
+                try:
+                    Street = (json_response[0]["Place"]["Street"])
+                    Streets.append(Street)
+                except:
+                    Streets.append("")
+                try:
                     if "Municipality" in (json_response[0]["Place"]):
                         Municipality = (json_response[0]["Place"]["Municipality"])
                         Municipalities.append(Municipality)
@@ -106,6 +118,8 @@ def lambda_handler(event, context):
             #data["Latitude"] = Latitude
             #data["Longitude"] = Longitude
             data["Label"] = Labels
+            data["AddressNumber"] = AddressNumbers
+            data["Street"] = Streets
             data["Municipality"] = Municipalities
             data["Region"] = Regions
             data["SubRegion"] = SubRegions
@@ -147,6 +161,16 @@ def lambda_handler(event, context):
                     Labels.append("")
                     print("Error: Address unavailable for given input in row", (len(Points)) + 1)
                  try:
+                    AddressNumber = (json_response[0]["Place"]["AddressNumber"])
+                    AddressNumbers.append(AddressNumber)
+                 except:
+                    AddressNumbers.append("")
+                 try:
+                    Street = (json_response[0]["Place"]["Street"])
+                    Streets.append(Street)
+                 except:
+                    Streets.append("")
+                 try:
                     if "Municipality" in (json_response[0]["Place"]):
                          Municipality = (json_response[0]["Place"]["Municipality"])
                          Municipalities.append(Municipality)
@@ -178,6 +202,8 @@ def lambda_handler(event, context):
             data["Latitude"] = Latitude
             data["Longitude"] = Longitude
             data["Label"] = Labels
+            data["AddressNumber"] = AddressNumbers
+            data["Street"] = Streets
             data["Municipality"] = Municipalities
             data["Region"] = Regions
             data["SubRegion"] = SubRegions
@@ -217,6 +243,11 @@ def lambda_handler(event, context):
                     Labels.append("")
                     print("Error: Address unavailable for given input in row", (len(Points)) + 1)
                 try:
+                    Street = (json_response[0]["Place"]["Street"])
+                    Streets.append(Street)
+                except:
+                    Streets.append("")
+                try:
                     if "Municipality" in (json_response[0]["Place"]):
                         Municipality = (json_response[0]["Place"]["Municipality"])
                         Municipalities.append(Municipality)
@@ -248,6 +279,7 @@ def lambda_handler(event, context):
             data["Latitude"] = Latitude
             data["Longitude"] = Longitude
             data["Label"] = Labels
+            data["Street"] = Streets
             data["Municipality"] = Municipalities
             data["Region"] = Regions
             data["SubRegion"] = SubRegions

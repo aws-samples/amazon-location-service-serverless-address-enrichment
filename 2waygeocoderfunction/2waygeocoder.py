@@ -54,8 +54,8 @@ def lambda_handler(event, context):
                 except:
                     print("API Response Error")
                 try:
-                    Country = (json_response[0]["Place"]["Country"])
-                    Countries.append(Country)
+                    CountryCode = (json_response[0]["Place"]["Country"])
+                    Countries.append(CountryCode)
                 except:
                     Countries.append("")
                 try:
@@ -113,7 +113,6 @@ def lambda_handler(event, context):
                     print("Error: SubRegion unavailable for given input in row", (len(Points)) + 1)
     
             data["Points"] = Points
-            data["Country"] = Countries
             data["Zipcode"] = Zipcodes
             #data["Latitude"] = Latitude
             #data["Longitude"] = Longitude
@@ -123,23 +122,29 @@ def lambda_handler(event, context):
             data["Municipality"] = Municipalities
             data["Region"] = Regions
             data["SubRegion"] = SubRegions
+            data["CountryCode"] = Countries
         #########################################################
         #     Geocoder  (for different possible column labels)  #
         #########################################################
         elif "Address" in columns:
             for index, row in data.iterrows():
                  try:
+                    FilterCountry = [str(row.Country)]
+                 except:
+                    FilterCountry=[]       
+                 try:
                     json_response = ""
                     response = location.search_place_index_for_text(
                         IndexName=location_index,
-                        Text= str(row.Address) + str(row.City) + "," + str(row.State))
+                        Text= str(row.Address) + str(row.City) + "," + str(row.State) + "," + str(row.Zip),
+                        FilterCountries=FilterCountry)
                     json_response = response["Results"]
                     print(json_response)
                  except:
                     print("API Response Error")
                  try:
-                    Country = (json_response[0]["Place"]["Country"])
-                    Countries.append(Country)
+                    CountryCode = (json_response[0]["Place"]["Country"])
+                    Countries.append(CountryCode)
                  except:
                     Countries.append("")
                  try:
@@ -198,7 +203,6 @@ def lambda_handler(event, context):
                     print("Error: Relevance unavailable for given input in row", (len(Points)) + 1)
     
             data["Points"] = Points
-            data["Country"] = Countries
             data["Latitude"] = Latitude
             data["Longitude"] = Longitude
             data["Label"] = Labels
@@ -207,21 +211,27 @@ def lambda_handler(event, context):
             data["Municipality"] = Municipalities
             data["Region"] = Regions
             data["SubRegion"] = SubRegions
+            data["CountryCode"] = Countries
             data["Relevance"] = Relevances
         elif "Street" in columns:
             for index, row in data.iterrows():
                 try:
+                    FilterCountry = [str(row.Country)]
+                except:
+                    FilterCountry=[]       
+                try:
                     json_response = ""
                     response = location.search_place_index_for_text(
                         IndexName=location_index,
-                        Text= str(row.Street) + row.City + "," + row.State)
+                        Text= str(row.Street) + row.City + "," + row.State,
+                        FilterCountries=FilterCountry)
                     json_response = response["Results"]
                     print(json_response)
                 except:
                     print("API Response Error")
                 try:
-                    Country = (json_response[0]["Place"]["Country"])
-                    Countries.append(Country)
+                    CountryCode = (json_response[0]["Place"]["Country"])
+                    Countries.append(CountryCode)
                 except:
                     Countries.append("")
                 try:
@@ -275,7 +285,6 @@ def lambda_handler(event, context):
                     print("Error: Relevance unavailable for given input in row", (len(Points)) + 1)
     
             data["Points"] = Points
-            data["Country"] = Countries
             data["Latitude"] = Latitude
             data["Longitude"] = Longitude
             data["Label"] = Labels
@@ -283,22 +292,28 @@ def lambda_handler(event, context):
             data["Municipality"] = Municipalities
             data["Region"] = Regions
             data["SubRegion"] = SubRegions
+            data["CountryCode"] = Countries
             data["Relevance"] = Relevances
         elif "City" and "State" in columns:
             for index, row in data.iterrows():
                 try:
+                    FilterCountry = [str(row.Country)]
+                except:
+                    FilterCountry=[]       
+                try:
                     json_response = ""
                     response = location.search_place_index_for_text(
                         IndexName=location_index,
-                        Text= row.City +","+ row.State)
+                        Text= row.City +","+ row.State,
+                        FilterCountries=FilterCountry)
                     json_response = response["Results"]
                     print(json_response)
                     print(index)
                 except:
                     print("API Response Error")
                 try:
-                    Country = (json_response[0]["Place"]["Country"])
-                    Countries.append(Country)
+                    CountryCode = (json_response[0]["Place"]["Country"])
+                    Countries.append(CountryCode)
                 except:
                     Countries.append("")
                 try:
@@ -347,13 +362,13 @@ def lambda_handler(event, context):
                     print("Error: Relevance unavailable for given input in row", (len(Points)) + 1)
     
             data["Points"] = Points
-            data["Country"] = Countries
             data["Latitude"] = Latitude
             data["Longitude"] = Longitude
             data["Label"] = Labels
             data["Municipality"] = Municipalities
             data["Region"] = Regions
             data["SubRegion"] = SubRegions
+            data["CountryCode"] = Countries
             data["Relevance"] = Relevances
         ################################################## 
         #     Write processed shard to S3 via a PUT      #

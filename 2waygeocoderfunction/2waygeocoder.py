@@ -129,15 +129,16 @@ def lambda_handler(event, context):
         elif "Address" in columns:
             for index, row in data.iterrows():
                  try:
-                    FilterCountry = [str(row.Country)]
-                 except:
-                    FilterCountry=[]       
-                 try:
                     json_response = ""
-                    response = location.search_place_index_for_text(
-                        IndexName=location_index,
-                        Text= str(row.Address) + str(row.City) + "," + str(row.State) + "," + str(row.Zip),
-                        FilterCountries=FilterCountry)
+                    if pd.isna(row.Country) == False:
+                        response = location.search_place_index_for_text(
+                            IndexName=location_index,
+                            Text= str(row.Address) + str(row.City) + "," + str(row.State) + "," + str(row.Zip),
+                            FilterCountries=[str(row.Country)])
+                    else:
+                        response = location.search_place_index_for_text(
+                            IndexName=location_index,
+                            Text= str(row.Address) + str(row.City) + "," + str(row.State) + "," + str(row.Zip))
                     json_response = response["Results"]
                     print(json_response)
                  except:
@@ -216,15 +217,16 @@ def lambda_handler(event, context):
         elif "Street" in columns:
             for index, row in data.iterrows():
                 try:
-                    FilterCountry = [str(row.Country)]
-                except:
-                    FilterCountry=[]       
-                try:
                     json_response = ""
-                    response = location.search_place_index_for_text(
-                        IndexName=location_index,
-                        Text= str(row.Street) + row.City + "," + row.State,
-                        FilterCountries=FilterCountry)
+                    if pd.isna(row.Country) == False:
+                        response = location.search_place_index_for_text(
+                            IndexName=location_index,
+                            Text= str(row.Street) + row.City + "," + row.State,
+                            FilterCountries=[str(row.Country)])
+                    else:
+                        response = location.search_place_index_for_text(
+                            IndexName=location_index,
+                            Text= str(row.Street) + row.City + "," + row.State)
                     json_response = response["Results"]
                     print(json_response)
                 except:
@@ -297,15 +299,16 @@ def lambda_handler(event, context):
         elif "City" and "State" in columns:
             for index, row in data.iterrows():
                 try:
-                    FilterCountry = [str(row.Country)]
-                except:
-                    FilterCountry=[]       
-                try:
                     json_response = ""
-                    response = location.search_place_index_for_text(
-                        IndexName=location_index,
-                        Text= row.City +","+ row.State,
-                        FilterCountries=FilterCountry)
+                    if pd.isna(row.Country) == False:
+                        response = location.search_place_index_for_text(
+                            IndexName=location_index,
+                            Text= row.City +","+ row.State,
+                            FilterCountries=[str(row.Country)])
+                    else:
+                        response = location.search_place_index_for_text(
+                            IndexName=location_index,
+                            Text= row.City +","+ row.State)
                     json_response = response["Results"]
                     print(json_response)
                     print(index)

@@ -55,49 +55,49 @@ def lambda_handler(event, context):
                     Country = (json_response[0]["Place"]["Country"])
                     Countries.append(Country)
                 except:
-                    Countries.append(0)
+                    Countries.append("")
                 try:
                     Zipcode = (json_response[0]["Place"]["PostalCode"])
                     Zipcodes.append(Zipcode)
                 except:
-                    Zipcodes.append(0)
+                    Zipcodes.append("")
                 try:
                     Point = (json_response[0]["Place"]["Geometry"]["Point"])
                     Points.append(Point)
                 except:
-                    Points.append(0)
+                    Points.append("")
                 try:
                     Longitude.append(Point[0])
                     Latitude.append(Point[1])
                 except:
-                    Longitude.append(0)
-                    Latitude.append(0)
+                    Longitude.append("")
+                    Latitude.append("")
                     print("Error: Lat/Lon unavailable for given input in row", (len(Points)) + 1)
                 try:
                     Label = (json_response[0]["Place"]["Label"])
                     Labels.append(Label)
                 except:
-                    Labels.append(0)
+                    Labels.append("")
                     print("Error: Address unavailable for given input in row", (len(Points)) + 1)
                 try:
                     if "Municipality" in (json_response[0]["Place"]):
                         Municipality = (json_response[0]["Place"]["Municipality"])
                         Municipalities.append(Municipality)
                     else:
-                        Municipalities.append(0)
+                        Municipalities.append("")
                 except:
-                    Municipalities.append(0)
+                    Municipalities.append("")
                 try:
                     Region = (json_response[0]["Place"]["Region"])
                     Regions.append(Region)
                 except:
-                    Regions.append(0)
+                    Regions.append("")
                     print("Error: Region unavailable for given input in row", (len(Points)) + 1)
                 try:
                     SubRegion = (json_response[0]["Place"]["SubRegion"])
                     SubRegions.append(SubRegion)
                 except:
-                    SubRegions.append(0)
+                    SubRegions.append("")
                     print("Error: SubRegion unavailable for given input in row", (len(Points)) + 1)
     
             data["Points"] = Points
@@ -118,7 +118,7 @@ def lambda_handler(event, context):
                     json_response = ""
                     response = location.search_place_index_for_text(
                         IndexName=location_index,
-                        Text= str(row.Address) + row.City + "," + row.State)
+                        Text= str(row.Address) + str(row.City) + "," + str(row.State))
                     json_response = response["Results"]
                     print(json_response)
                  except:
@@ -127,50 +127,50 @@ def lambda_handler(event, context):
                     Country = (json_response[0]["Place"]["Country"])
                     Countries.append(Country)
                  except:
-                    Countries.append(0)
+                    Countries.append("")
                  try:
                     Point = (json_response[0]["Place"]["Geometry"]["Point"])
                     Points.append(Point)
                  except:
-                    Points.append(0)
+                    Points.append("")
                  try:
                     Longitude.append(Point[0])
                     Latitude.append(Point[1])
                  except:
-                    Longitude.append(0)
-                    Latitude.append(0)
+                    Longitude.append("")
+                    Latitude.append("")
                     print("Error: Lat/Lon unavailable for given input in row", (len(Points)) + 1)
                  try:
                     Label = (json_response[0]["Place"]["Label"])
                     Labels.append(Label)
                  except:
-                    Labels.append(0)
+                    Labels.append("")
                     print("Error: Address unavailable for given input in row", (len(Points)) + 1)
                  try:
                     if "Municipality" in (json_response[0]["Place"]):
                          Municipality = (json_response[0]["Place"]["Municipality"])
                          Municipalities.append(Municipality)
                     else:
-                         Municipalities.append(0)
+                         Municipalities.append("")
                  except:
-                     Municipalities.append(0)
+                     Municipalities.append("")
                  try:
                     Region = (json_response[0]["Place"]["Region"])
                     Regions.append(Region)
                  except:
-                    Regions.append(0)
+                    Regions.append("")
                     print("Error: Region unavailable for given input in row", (len(Points)) + 1)
                  try:
                     SubRegion = (json_response[0]["Place"]["SubRegion"])
                     SubRegions.append(SubRegion)
                  except:
-                    SubRegions.append(0)
+                    SubRegions.append("")
                     print("Error: SubRegion unavailable for given input in row", (len(Points)) + 1)
                  try:
                     Relevance = (json_response[0]["Relevance"])
                     Relevances.append(Relevance)
                  except:
-                    Relevances.append(0)
+                    Relevances.append("")
                     print("Error: Relevance unavailable for given input in row", (len(Points)) + 1)
     
             data["Points"] = Points
@@ -197,50 +197,50 @@ def lambda_handler(event, context):
                     Country = (json_response[0]["Place"]["Country"])
                     Countries.append(Country)
                 except:
-                    Countries.append(0)
+                    Countries.append("")
                 try:
                     Point = (json_response[0]["Place"]["Geometry"]["Point"])
                     Points.append(Point)
                 except:
-                    Points.append(0)
+                    Points.append("")
                 try:
                     Longitude.append(Point[0])
                     Latitude.append(Point[1])
                 except:
-                    Longitude.append(0)
-                    Latitude.append(0)
+                    Longitude.append("")
+                    Latitude.append("")
                     print("Error: Lat/Lon unavailable for given input in row", (len(Points)) + 1)
                 try:
                     Label = (json_response[0]["Place"]["Label"])
                     Labels.append(Label)
                 except:
-                    Labels.append(0)
+                    Labels.append("")
                     print("Error: Address unavailable for given input in row", (len(Points)) + 1)
                 try:
                     if "Municipality" in (json_response[0]["Place"]):
                         Municipality = (json_response[0]["Place"]["Municipality"])
                         Municipalities.append(Municipality)
                     else:
-                        Municipalities.append(0)
+                        Municipalities.append("")
                 except:
-                    Municipalities.append(0)
+                    Municipalities.append("")
                 try:
                     Region = (json_response[0]["Place"]["Region"])
                     Regions.append(Region)
                 except:
-                    Regions.append(0)
+                    Regions.append("")
                     print("Error: Region unavailable for given input in row", (len(Points)) + 1)
                 try:
                     SubRegion = (json_response[0]["Place"]["SubRegion"])
                     SubRegions.append(SubRegion)
                 except:
-                    SubRegions.append(0)
+                    SubRegions.append("")
                     print("Error: SubRegion unavailable for given input in row", (len(Points)) + 1)
                 try:
                     Relevance = (json_response[0]["Relevance"])
                     Relevances.append(Relevance)
                 except:
-                    Relevances.append(0)
+                    Relevances.append("")
                     print("Error: Relevance unavailable for given input in row", (len(Points)) + 1)
     
             data["Points"] = Points
@@ -268,50 +268,50 @@ def lambda_handler(event, context):
                     Country = (json_response[0]["Place"]["Country"])
                     Countries.append(Country)
                 except:
-                    Countries.append(0)
+                    Countries.append("")
                 try:
                     Point = (json_response[0]["Place"]["Geometry"]["Point"])
                     Points.append(Point)
                 except:
-                    Points.append(0)
+                    Points.append("")
                 try:
                     Longitude.append(Point[0])
                     Latitude.append(Point[1])
                 except:
-                    Longitude.append(0)
-                    Latitude.append(0)
+                    Longitude.append("")
+                    Latitude.append("")
                     print("Error: Lat/Lon unavailable for given input in row", (len(Points)) + 1)
                 try:
                     Label = (json_response[0]["Place"]["Label"])
                     Labels.append(Label)
                 except:
-                    Labels.append(0)
+                    Labels.append("")
                     print("Error: Address unavailable for given input in row", (len(Points)) + 1)
                 try:
                     if "Municipality" in (json_response[0]["Place"]):
                         Municipality = (json_response[0]["Place"]["Municipality"])
                         Municipalities.append(Municipality)
                     else:
-                        Municipalities.append(0)
+                        Municipalities.append("")
                 except:
-                    Municipalities.append(0)
+                    Municipalities.append("")
                 try:
                     Region = (json_response[0]["Place"]["Region"])
                     Regions.append(Region)
                 except:
-                    Regions.append(0)
+                    Regions.append("")
                     print("Error: Region unavailable for given input in row", (len(Points)) + 1)
                 try:
                     SubRegion = (json_response[0]["Place"]["SubRegion"])
                     SubRegions.append(SubRegion)
                 except:
-                    SubRegions.append(0)
+                    SubRegions.append("")
                     print("Error: SubRegion unavailable for given input in row", (len(Points)) + 1)
                 try:
                     Relevance = (json_response[0]["Relevance"])
                     Relevances.append(Relevance)
                 except:
-                    Relevances.append(0)
+                    Relevances.append("")
                     print("Error: Relevance unavailable for given input in row", (len(Points)) + 1)
     
             data["Points"] = Points

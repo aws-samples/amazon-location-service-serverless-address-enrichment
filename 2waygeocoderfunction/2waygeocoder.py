@@ -44,6 +44,7 @@ def lambda_handler(event, context):
         if "Latitude" and "Longitude" in columns:
             for index, row in data.iterrows():
                 try:
+                    json_response = ""
                     response = location.search_place_index_for_position(
                         IndexName=location_index,
                         Position=[row.Longitude, row.Latitude])
@@ -114,6 +115,7 @@ def lambda_handler(event, context):
         elif "Address" in columns:
             for index, row in data.iterrows():
                  try:
+                    json_response = ""
                     response = location.search_place_index_for_text(
                         IndexName=location_index,
                         Text= str(row.Address) + row.City + "," + row.State)
@@ -183,6 +185,7 @@ def lambda_handler(event, context):
         elif "Street" in columns:
             for index, row in data.iterrows():
                 try:
+                    json_response = ""
                     response = location.search_place_index_for_text(
                         IndexName=location_index,
                         Text= str(row.Street) + row.City + "," + row.State)
@@ -252,6 +255,7 @@ def lambda_handler(event, context):
         elif "City" and "State" in columns:
             for index, row in data.iterrows():
                 try:
+                    json_response = ""
                     response = location.search_place_index_for_text(
                         IndexName=location_index,
                         Text= row.City +","+ row.State)

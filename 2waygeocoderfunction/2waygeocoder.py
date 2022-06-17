@@ -130,7 +130,7 @@ def lambda_handler(event, context):
             for index, row in data.iterrows():
                  try:
                     json_response = ""
-                    if pd.isna(row.Country) == False:
+                    if 'Country' in columns and pd.isna(row.Country) == False:
                         response = location.search_place_index_for_text(
                             IndexName=location_index,
                             Text= str(row.Address) + str(row.City) + "," + str(row.State) + "," + str(row.Zip),
@@ -218,7 +218,7 @@ def lambda_handler(event, context):
             for index, row in data.iterrows():
                 try:
                     json_response = ""
-                    if pd.isna(row.Country) == False:
+                    if 'Country' in columns and pd.isna(row.Country) == False:
                         response = location.search_place_index_for_text(
                             IndexName=location_index,
                             Text= str(row.Street) + row.City + "," + row.State,
@@ -300,7 +300,7 @@ def lambda_handler(event, context):
             for index, row in data.iterrows():
                 try:
                     json_response = ""
-                    if pd.isna(row.Country) == False:
+                    if 'Country' in columns and pd.isna(row.Country) == False:
                         response = location.search_place_index_for_text(
                             IndexName=location_index,
                             Text= row.City +","+ row.State,

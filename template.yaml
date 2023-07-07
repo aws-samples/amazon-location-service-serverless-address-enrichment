@@ -4,21 +4,10 @@ Description: Serverless pipeline for Address Validation with AWS Location Servic
 
 Globals: 
   Function:
-    Runtime: python3.9
+    Runtime: python3.7
     MemorySize: 128
     Timeout: 15
 
-Parameters:
-  LocationIndexName:
-    Type: String
-  InputBucketName:
-    Type: String
-  RawBucketName:
-    Type: String
-  ProcessedBucketName:
-    Type: String 
-  DestinationBucketName:
-    Type: String 
 
 
 Resources: 
@@ -33,7 +22,7 @@ Resources:
       #DataSourceConfiguration: 
        # DataSourceConfiguration
       Description: Place index for Amazon Location Service Using Esri
-      IndexName: !Ref LocationIndexName
+      IndexName: ServerlessAddressValidation
       PricingPlan: RequestBasedUsage
 
 ########################################
@@ -43,19 +32,19 @@ Resources:
   InputBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref InputBucketName
+      BucketName: !Ref InputBucket
   RawBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref RawBucketName
+      BucketName: !Ref RawBucket
   ProcessedBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref ProcessedBucketName
+      BucketName: !Ref ProcessedBucket
   DestinationBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref DestinationBucketName
+      BucketName: !Ref DestinationBucket
 
 ########################################
 #   Lambda Functions                   #
@@ -69,13 +58,13 @@ Resources:
       Description: Takes object inputed to InputBucket, shards into X number of files, and puts those files into the RawBucket
       Environment:
         Variables:
-          INPUT_BUCKET: !Ref InputBucketName
-          RAW_SHARDS_BUCKET: !Ref RawBucketName
+          INPUT_BUCKET: !Ref InputBucket
+          RAW_SHARDS_BUCKET: !Ref RawBucket
       Policies:
         - S3ReadPolicy:
-            BucketName: !Ref InputBucketName
+            BucketName: !Ref InputBucket
         - S3WritePolicy:
-            BucketName: !Ref RawBucketName
+            BucketName: !Ref RawBucket
       Events:
         FileUpload:
           Type: S3
@@ -98,14 +87,14 @@ Resources:
       Timeout: 900
       Environment:
         Variables: 
-          RAW_SHARDS_BUCKET: !Ref RawBucketName
-          PROCESSED_SHARDS_BUCKET: !Ref ProcessedBucketName
-          LOCATION_INDEX: !Ref LocationIndexName
+          RAW_SHARDS_BUCKET: !Ref RawBucket
+          PROCESSED_SHARDS_BUCKET: !Ref ProcessedBucket
+          LOCATION_INDEX: !Ref LocationIndex
       Policies: 
         - S3ReadPolicy:
-            BucketName: !Ref RawBucketName
+            BucketName: !Ref RawBucket
         - S3WritePolicy: 
-            BucketName: !Ref ProcessedBucketName
+            BucketName: !Ref ProcessedBucket
         - Version: '2012-10-17' 
           Statement:
               #The following stanzas are required to invoke nested workflows 
@@ -129,13 +118,13 @@ Resources:
       Description: Takes objects from processed data shards once the last file is PUT, appends them together to create a single final dataset
       Environment: 
         Variables:
-          PROCESSED_SHARDS_BUCKET: !Ref ProcessedBucketName
-          DESTINATION_BUCKET: !Ref DestinationBucketName
+          PROCESSED_SHARDS_BUCKET: !Ref ProcessedBucket
+          DESTINATION_BUCKET: !Ref DestinationBucket
       Policies: 
         - S3ReadPolicy:
-            BucketName: !Ref ProcessedBucketName
+            BucketName: !Ref ProcessedBucket
         - S3WritePolicy:
-            BucketName: !Ref DestinationBucketName
+            BucketName: !Ref DestinationBucket
       Events:
         FileUpload:
           Type: S3
@@ -150,16 +139,16 @@ Resources:
 
 Outputs:
   InputBucket:
-    Value: !Ref InputBucketName
+    Value: !Ref InputBucket
     Description: S3 Bucket for .csv file input
   RawBucket:
-    Value: !Ref RawBucketName
+    Value: !Ref RawBucket
     Description: S3 bucket for output from scatter function
   ProcessedBucket:
-    Value: !Ref ProcessedBucketName
+    Value: !Ref ProcessedBucket
     Description: S3 bucket for output from 2waygeocoder function, input for gather function
   DestinationBucket:
-    Value: !Ref DestinationBucketName
+    Value: !Ref DestinationBucket
     Description: S3 bucket for output from gather function
   FunctionArn:
     Value: scatter

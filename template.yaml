@@ -32,19 +32,20 @@ Resources:
   InputBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref InputBucket
+      BucketName: !Sub "inputbucket-address-validation-${AWS::AccountId}"
+
   RawBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref RawBucket
+      BucketName: !Sub "rawbucket-address-validation-${AWS::AccountId}"
   ProcessedBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref ProcessedBucket
+      BucketName: !Sub "procbucket-address-validation-${AWS::AccountId}"
   DestinationBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref DestinationBucket
+      BucketName: !Sub "destbucket-address-validation-${AWS::AccountId}"
 
 ########################################
 #   Lambda Functions                   #
@@ -58,13 +59,13 @@ Resources:
       Description: Takes object inputed to InputBucket, shards into X number of files, and puts those files into the RawBucket
       Environment:
         Variables:
-          INPUT_BUCKET: !Ref InputBucket
-          RAW_SHARDS_BUCKET: !Ref RawBucket
+          INPUT_BUCKET: !Sub "inputbucket-address-validation-${AWS::AccountId}"
+          RAW_SHARDS_BUCKET: !Sub "rawbucket-address-validation-${AWS::AccountId}"
       Policies:
         - S3ReadPolicy:
-            BucketName: !Ref InputBucket
+            BucketName: !Sub "inputbucket-address-validation-${AWS::AccountId}"
         - S3WritePolicy:
-            BucketName: !Ref RawBucket
+            BucketName: !Sub "rawbucket-address-validation-${AWS::AccountId}"
       Events:
         FileUpload:
           Type: S3
@@ -87,14 +88,14 @@ Resources:
       Timeout: 900
       Environment:
         Variables: 
-          RAW_SHARDS_BUCKET: !Ref RawBucket
-          PROCESSED_SHARDS_BUCKET: !Ref ProcessedBucket
-          LOCATION_INDEX: !Ref LocationIndex
+          RAW_SHARDS_BUCKET: !Sub "rawbucket-address-validation-${AWS::AccountId}"
+          PROCESSED_SHARDS_BUCKET: !Sub "procbucket-address-validation-${AWS::AccountId}"
+          LOCATION_INDEX: !Ref AmazonLocationIndex
       Policies: 
         - S3ReadPolicy:
-            BucketName: !Ref RawBucket
+            BucketName: !Sub "rawbucket-address-validation-${AWS::AccountId}"
         - S3WritePolicy: 
-            BucketName: !Ref ProcessedBucket
+            BucketName: !Sub "procbucket-address-validation-${AWS::AccountId}"
         - Version: '2012-10-17' 
           Statement:
               #The following stanzas are required to invoke nested workflows 
@@ -118,13 +119,13 @@ Resources:
       Description: Takes objects from processed data shards once the last file is PUT, appends them together to create a single final dataset
       Environment: 
         Variables:
-          PROCESSED_SHARDS_BUCKET: !Ref ProcessedBucket
-          DESTINATION_BUCKET: !Ref DestinationBucket
+          PROCESSED_SHARDS_BUCKET: !Sub "procbucket-address-validation-${AWS::AccountId}"
+          DESTINATION_BUCKET: !Sub "destbucket-address-validation-${AWS::AccountId}"
       Policies: 
         - S3ReadPolicy:
-            BucketName: !Ref ProcessedBucket
+            BucketName: !Sub "procbucket-address-validation-${AWS::AccountId}"
         - S3WritePolicy:
-            BucketName: !Ref DestinationBucket
+            BucketName: !Sub "destbucket-address-validation-${AWS::AccountId}"
       Events:
         FileUpload:
           Type: S3

@@ -50,7 +50,7 @@ def lambda_handler(event, context):
         data_1 = pd.read_csv((response_2.get("Body")))
         data_1 = data_1.dropna(thresh=2)
         #print(titanic_data)
-        final_doc = final_doc.append(data_1)
+        final_doc = pd.concat([final_doc, data_1])
         count_2 +=1
     
     

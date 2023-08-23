@@ -22,7 +22,7 @@ Resources:
       #DataSourceConfiguration: 
        # DataSourceConfiguration
       Description: Place index for Amazon Location Service Using Esri
-      IndexName: ServerlessAddressValidation
+      IndexName: ServerlessAddressEnrichment
       PricingPlan: RequestBasedUsage
 
 ########################################
@@ -32,20 +32,19 @@ Resources:
   InputBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "inputbucket-address-validation-${AWS::AccountId}"
-
+      BucketName: !Sub "${AWS::StackName}-input-${AWS::Region}-${AWS::AccountId}"
   RawBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "rawbucket-address-validation-${AWS::AccountId}"
+      BucketName: !Sub "${AWS::StackName}-raw-${AWS::Region}-${AWS::AccountId}"
   ProcessedBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "procbucket-address-validation-${AWS::AccountId}"
+      BucketName: !Sub "${AWS::StackName}-processed-${AWS::Region}-${AWS::AccountId}"
   DestinationBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "destbucket-address-validation-${AWS::AccountId}"
+      BucketName: !Sub "${AWS::StackName}-destination-${AWS::Region}-${AWS::AccountId}"
 
 ########################################
 #   Lambda Functions                   #
@@ -59,13 +58,13 @@ Resources:
       Description: Takes object inputed to InputBucket, shards into X number of files, and puts those files into the RawBucket
       Environment:
         Variables:
-          INPUT_BUCKET: !Sub "inputbucket-address-validation-${AWS::AccountId}"
-          RAW_SHARDS_BUCKET: !Sub "rawbucket-address-validation-${AWS::AccountId}"
+          INPUT_BUCKET: !Sub "${AWS::StackName}-input-${AWS::Region}-${AWS::AccountId}"
+          RAW_SHARDS_BUCKET: !Sub "${AWS::StackName}-raw-${AWS::Region}-${AWS::AccountId}"
       Policies:
         - S3ReadPolicy:
-            BucketName: !Sub "inputbucket-address-validation-${AWS::AccountId}"
+            BucketName: !Sub "${AWS::StackName}-input-${AWS::Region}-${AWS::AccountId}"
         - S3WritePolicy:
-            BucketName: !Sub "rawbucket-address-validation-${AWS::AccountId}"
+            BucketName: !Sub "${AWS::StackName}-raw-${AWS::Region}-${AWS::AccountId}"
       Events:
         FileUpload:
           Type: S3
@@ -88,14 +87,14 @@ Resources:
       Timeout: 900
       Environment:
         Variables: 
-          RAW_SHARDS_BUCKET: !Sub "rawbucket-address-validation-${AWS::AccountId}"
-          PROCESSED_SHARDS_BUCKET: !Sub "procbucket-address-validation-${AWS::AccountId}"
+          RAW_SHARDS_BUCKET: !Sub "${AWS::StackName}-raw-${AWS::Region}-${AWS::AccountId}"
+          PROCESSED_SHARDS_BUCKET: !Sub "${AWS::StackName}-processed-${AWS::Region}-${AWS::AccountId}"
           LOCATION_INDEX: !Ref AmazonLocationIndex
       Policies: 
         - S3ReadPolicy:
-            BucketName: !Sub "rawbucket-address-validation-${AWS::AccountId}"
+            BucketName: !Sub "${AWS::StackName}-raw-${AWS::Region}-${AWS::AccountId}"
         - S3WritePolicy: 
-            BucketName: !Sub "procbucket-address-validation-${AWS::AccountId}"
+            BucketName: !Sub "${AWS::StackName}-processed-${AWS::Region}-${AWS::AccountId}"
         - Version: '2012-10-17' 
           Statement:
               #The following stanzas are required to invoke nested workflows 
@@ -119,13 +118,13 @@ Resources:
       Description: Takes objects from processed data shards once the last file is PUT, appends them together to create a single final dataset
       Environment: 
         Variables:
-          PROCESSED_SHARDS_BUCKET: !Sub "procbucket-address-validation-${AWS::AccountId}"
-          DESTINATION_BUCKET: !Sub "destbucket-address-validation-${AWS::AccountId}"
+          PROCESSED_SHARDS_BUCKET: !Sub "${AWS::StackName}-processed-${AWS::Region}-${AWS::AccountId}"
+          DESTINATION_BUCKET: !Sub "${AWS::StackName}-destination-${AWS::Region}-${AWS::AccountId}"
       Policies: 
         - S3ReadPolicy:
-            BucketName: !Sub "procbucket-address-validation-${AWS::AccountId}"
+            BucketName: !Sub "${AWS::StackName}-processed-${AWS::Region}-${AWS::AccountId}"
         - S3WritePolicy:
-            BucketName: !Sub "destbucket-address-validation-${AWS::AccountId}"
+            BucketName: !Sub "${AWS::StackName}-destination-${AWS::Region}-${AWS::AccountId}"
       Events:
         FileUpload:
           Type: S3
@@ -140,16 +139,16 @@ Resources:
 
 Outputs:
   InputBucket:
-    Value: !Ref InputBucket
+    Value: !Sub "${AWS::StackName}-input-${AWS::Region}-${AWS::AccountId}"
     Description: S3 Bucket for .csv file input
   RawBucket:
-    Value: !Ref RawBucket
+    Value: !Sub "${AWS::StackName}-raw-${AWS::Region}-${AWS::AccountId}"
     Description: S3 bucket for output from scatter function
   ProcessedBucket:
-    Value: !Ref ProcessedBucket
+    Value: !Sub "${AWS::StackName}-processed-${AWS::Region}-${AWS::AccountId}"
     Description: S3 bucket for output from 2waygeocoder function, input for gather function
   DestinationBucket:
-    Value: !Ref DestinationBucket
+    Value: !Sub "${AWS::StackName}-destination-${AWS::Region}-${AWS::AccountId}"
     Description: S3 bucket for output from gather function
   FunctionArn:
     Value: scatter

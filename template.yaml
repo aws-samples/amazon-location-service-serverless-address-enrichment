@@ -8,17 +8,6 @@ Globals:
     MemorySize: 128
     Timeout: 15
 
-Parameters:
-  LocationIndexName:
-    Type: String
-  InputBucketName:
-    Type: String
-  RawBucketName:
-    Type: String
-  ProcessedBucketName:
-    Type: String 
-  DestinationBucketName:
-    Type: String 
 
 
 Resources: 
@@ -33,7 +22,7 @@ Resources:
       #DataSourceConfiguration: 
        # DataSourceConfiguration
       Description: Place index for Amazon Location Service Using Esri
-      IndexName: !Ref LocationIndexName
+      IndexName: ServerlessAddressEnrichment
       PricingPlan: RequestBasedUsage
 
 ########################################
@@ -43,19 +32,19 @@ Resources:
   InputBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref InputBucketName
+      BucketName: !Sub "${AWS::StackName}-input-${AWS::Region}-${AWS::AccountId}"
   RawBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref RawBucketName
+      BucketName: !Sub "${AWS::StackName}-raw-${AWS::Region}-${AWS::AccountId}"
   ProcessedBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref ProcessedBucketName
+      BucketName: !Sub "${AWS::StackName}-processed-${AWS::Region}-${AWS::AccountId}"
   DestinationBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref DestinationBucketName
+      BucketName: !Sub "${AWS::StackName}-destination-${AWS::Region}-${AWS::AccountId}"
 
 ########################################
 #   Lambda Functions                   #
@@ -69,13 +58,13 @@ Resources:
       Description: Takes object inputed to InputBucket, shards into X number of files, and puts those files into the RawBucket
       Environment:
         Variables:
-          INPUT_BUCKET: !Ref InputBucketName
-          RAW_SHARDS_BUCKET: !Ref RawBucketName
+          INPUT_BUCKET: !Sub "${AWS::StackName}-input-${AWS::Region}-${AWS::AccountId}"
+          RAW_SHARDS_BUCKET: !Sub "${AWS::StackName}-raw-${AWS::Region}-${AWS::AccountId}"
       Policies:
         - S3ReadPolicy:
-            BucketName: !Ref InputBucketName
+            BucketName: !Sub "${AWS::StackName}-input-${AWS::Region}-${AWS::AccountId}"
         - S3WritePolicy:
-            BucketName: !Ref RawBucketName
+            BucketName: !Sub "${AWS::StackName}-raw-${AWS::Region}-${AWS::AccountId}"
       Events:
         FileUpload:
           Type: S3
@@ -98,14 +87,14 @@ Resources:
       Timeout: 900
       Environment:
         Variables: 
-          RAW_SHARDS_BUCKET: !Ref RawBucketName
-          PROCESSED_SHARDS_BUCKET: !Ref ProcessedBucketName
-          LOCATION_INDEX: !Ref LocationIndexName
+          RAW_SHARDS_BUCKET: !Sub "${AWS::StackName}-raw-${AWS::Region}-${AWS::AccountId}"
+          PROCESSED_SHARDS_BUCKET: !Sub "${AWS::StackName}-processed-${AWS::Region}-${AWS::AccountId}"
+          LOCATION_INDEX: !Ref AmazonLocationIndex
       Policies: 
         - S3ReadPolicy:
-            BucketName: !Ref RawBucketName
+            BucketName: !Sub "${AWS::StackName}-raw-${AWS::Region}-${AWS::AccountId}"
         - S3WritePolicy: 
-            BucketName: !Ref ProcessedBucketName
+            BucketName: !Sub "${AWS::StackName}-processed-${AWS::Region}-${AWS::AccountId}"
         - Version: '2012-10-17' 
           Statement:
               #The following stanzas are required to invoke nested workflows 
@@ -129,13 +118,13 @@ Resources:
       Description: Takes objects from processed data shards once the last file is PUT, appends them together to create a single final dataset
       Environment: 
         Variables:
-          PROCESSED_SHARDS_BUCKET: !Ref ProcessedBucketName
-          DESTINATION_BUCKET: !Ref DestinationBucketName
+          PROCESSED_SHARDS_BUCKET: !Sub "${AWS::StackName}-processed-${AWS::Region}-${AWS::AccountId}"
+          DESTINATION_BUCKET: !Sub "${AWS::StackName}-destination-${AWS::Region}-${AWS::AccountId}"
       Policies: 
         - S3ReadPolicy:
-            BucketName: !Ref ProcessedBucketName
+            BucketName: !Sub "${AWS::StackName}-processed-${AWS::Region}-${AWS::AccountId}"
         - S3WritePolicy:
-            BucketName: !Ref DestinationBucketName
+            BucketName: !Sub "${AWS::StackName}-destination-${AWS::Region}-${AWS::AccountId}"
       Events:
         FileUpload:
           Type: S3
@@ -150,16 +139,16 @@ Resources:
 
 Outputs:
   InputBucket:
-    Value: !Ref InputBucketName
+    Value: !Sub "${AWS::StackName}-input-${AWS::Region}-${AWS::AccountId}"
     Description: S3 Bucket for .csv file input
   RawBucket:
-    Value: !Ref RawBucketName
+    Value: !Sub "${AWS::StackName}-raw-${AWS::Region}-${AWS::AccountId}"
     Description: S3 bucket for output from scatter function
   ProcessedBucket:
-    Value: !Ref ProcessedBucketName
+    Value: !Sub "${AWS::StackName}-processed-${AWS::Region}-${AWS::AccountId}"
     Description: S3 bucket for output from 2waygeocoder function, input for gather function
   DestinationBucket:
-    Value: !Ref DestinationBucketName
+    Value: !Sub "${AWS::StackName}-destination-${AWS::Region}-${AWS::AccountId}"
     Description: S3 bucket for output from gather function
   FunctionArn:
     Value: scatter

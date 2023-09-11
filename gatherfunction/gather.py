@@ -48,7 +48,7 @@ def lambda_handler(event, context):
     for i in list_of_shards[1:length]:
         response_2 = s3_client.get_object(Bucket=bucket_name, Key=i)
         data_1 = pd.read_csv((response_2.get("Body")))
-        data_1 = data_1.dropna(thresh=2)
+        data_1 = data_1.dropna(thresh=1)
         #print(titanic_data)
         final_doc = pd.concat([final_doc, data_1])
         count_2 +=1

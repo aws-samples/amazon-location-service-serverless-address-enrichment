@@ -43,6 +43,7 @@ def lambda_handler(event, context):
         Relevances = []
         Interpolates = []
         Categories = []
+        ResultCounts = []
         ###########################
         #     ReverseGeocoder     #
         ###########################
@@ -161,6 +162,7 @@ def lambda_handler(event, context):
                             Text= str(row.Address) + str(row.City) + "," + str(row.State) + "," + str(row.Zip))
                     json_response = response["Results"]
                     print(json_response)
+                    ResultCounts.append (len(json_response))
                 except:
                     print("API Response Error")
                 try:
@@ -258,6 +260,7 @@ def lambda_handler(event, context):
             data["CountryCode"] = Countries
             data["Interpolated"] = Interpolates
             data["Categories"] = Categories
+            data["ResultCount"] = ResultCounts
         elif "Street" and "City" and "State" in columns:
             for index, row in data.iterrows():
                 try:
@@ -273,6 +276,7 @@ def lambda_handler(event, context):
                             Text= str(row.Street) + row.City + "," + row.State)
                     json_response = response["Results"]
                     print(json_response)
+                    ResultCounts.append (len(json_response))
                 except:
                     print("API Response Error")
                 try:
@@ -364,6 +368,7 @@ def lambda_handler(event, context):
             data["CountryCode"] = Countries
             data["Interpolated"] = Interpolates
             data["Categories"] = Categories
+            data["ResultCount"] = ResultCounts
         elif "City" and "State" in columns:
             for index, row in data.iterrows():
                 try:
@@ -380,6 +385,7 @@ def lambda_handler(event, context):
                     json_response = response["Results"]
                     print(json_response)
                     print(index)
+                    ResultCounts.append (len(json_response))
                 except:
                     print("API Response Error")
                 try:
@@ -466,6 +472,7 @@ def lambda_handler(event, context):
             data["CountryCode"] = Countries
             data["Interpolated"] = Interpolates
             data["Categories"] = Categories
+            data["ResultCount"] = ResultCounts
         elif "Addressline" in columns:
             for index, row in data.iterrows():
                 try:
@@ -480,6 +487,7 @@ def lambda_handler(event, context):
                             IndexName=location_index,
                             Text= row.Addressline)
                     json_response = response["Results"]
+                    ResultCounts.append (len(json_response))
                     if (len(json_response) == 0):
                         print (f"Error: No results for record {index} {row.Addressline}")
                         Countries.append("")
@@ -598,6 +606,7 @@ def lambda_handler(event, context):
             data["CountryCode"] = Countries
             data["Interpolated"] = Interpolates
             data["Categories"] = Categories
+            data["ResultCount"] = ResultCounts
         ################################################## 
         #     Write processed shard to S3 via a PUT      #
         ##################################################

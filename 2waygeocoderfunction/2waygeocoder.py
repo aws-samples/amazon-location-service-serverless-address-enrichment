@@ -463,7 +463,6 @@ def lambda_handler(event, context):
             # data["Points"] = Points
             data["Latitude"] = Latitude
             data["Longitude"] = Longitude
-            data["Street"] = Streets
             data["Municipality"] = Municipalities
             data["Neighborhood"] = Neighborhoods
             data["Region"] = Regions

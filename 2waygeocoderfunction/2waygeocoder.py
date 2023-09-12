@@ -66,12 +66,10 @@ def lambda_handler(event, context):
                 try:
                     Point = (json_response[0]["Place"]["Geometry"]["Point"])
                     Points.append(Point)
-                except:
-                    Points.append("")
-                try:
                     Longitude.append(Point[0])
                     Latitude.append(Point[1])
                 except:
+                    Points.append("")
                     Longitude.append("")
                     Latitude.append("")
                     print("Error: Lat/Lon unavailable for given input in row", (len(Points)) + 1)
@@ -151,12 +149,10 @@ def lambda_handler(event, context):
                 try:
                     Point = (json_response[0]["Place"]["Geometry"]["Point"])
                     Points.append(Point)
-                except:
-                    Points.append("")
-                try:
                     Longitude.append(Point[0])
                     Latitude.append(Point[1])
                 except:
+                    Points.append("")
                     Longitude.append("")
                     Latitude.append("")
                     print("Error: Lat/Lon unavailable for given input in row", (len(Points)) + 1)
@@ -239,12 +235,10 @@ def lambda_handler(event, context):
                 try:
                     Point = (json_response[0]["Place"]["Geometry"]["Point"])
                     Points.append(Point)
-                except:
-                    Points.append("")
-                try:
                     Longitude.append(Point[0])
                     Latitude.append(Point[1])
                 except:
+                    Points.append("")
                     Longitude.append("")
                     Latitude.append("")
                     print("Error: Lat/Lon unavailable for given input in row", (len(Points)) + 1)
@@ -322,12 +316,10 @@ def lambda_handler(event, context):
                 try:
                     Point = (json_response[0]["Place"]["Geometry"]["Point"])
                     Points.append(Point)
-                except:
-                    Points.append("")
-                try:
                     Longitude.append(Point[0])
                     Latitude.append(Point[1])
                 except:
+                    Points.append("")
                     Longitude.append("")
                     Latitude.append("")
                     print("Error: Lat/Lon unavailable for given input in row", (len(Points)) + 1)

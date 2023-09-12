@@ -220,7 +220,6 @@ def lambda_handler(event, context):
                     SubRegions.append(SubRegion)
                 except:
                     SubRegions.append("")
-                    print("Error: SubRegion unavailable for given input in row", (len(Points)) + 1)
                 try:
                     PostalCode = (json_response[0]["Place"]["PostalCode"])
                     PostalCodes.append(PostalCode)
@@ -329,7 +328,6 @@ def lambda_handler(event, context):
                     SubRegions.append(SubRegion)
                 except:
                     SubRegions.append("")
-                    print("Error: SubRegion unavailable for given input in row", (len(Points)) + 1)
                 try:
                     PostalCode = (json_response[0]["Place"]["PostalCode"])
                     PostalCodes.append(PostalCode)
@@ -433,7 +431,6 @@ def lambda_handler(event, context):
                     SubRegions.append(SubRegion)
                 except:
                     SubRegions.append("")
-                    print("Error: SubRegion unavailable for given input in row", (len(Points)) + 1)
                 try:
                     PostalCode = (json_response[0]["Place"]["PostalCode"])
                     PostalCodes.append(PostalCode)
@@ -497,6 +494,7 @@ def lambda_handler(event, context):
                         AddressNumbers.append("")
                         Streets.append("")
                         Municipalities.append("")
+                        Neighborhoods.append("")
                         Regions.append("")
                         SubRegions.append("")
                         PostalCodes.append("")
@@ -565,7 +563,6 @@ def lambda_handler(event, context):
                     SubRegions.append(SubRegion)
                 except:
                     SubRegions.append("")
-                    print("Error: SubRegion unavailable for given input in row", (len(Points)) + 1)
                 try:
                     PostalCode = (json_response[0]["Place"]["PostalCode"])
                     PostalCodes.append(PostalCode)

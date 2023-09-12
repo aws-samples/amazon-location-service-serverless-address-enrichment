@@ -129,7 +129,7 @@ def lambda_handler(event, context):
                 except:
                     Categories.append("")
                     print("Error: Categories unavailable for given input in row", (len(Points)) + 1)
-
+                    
             data["Label"] = Labels
             data["Points"] = Points
             #data["Latitude"] = Latitude

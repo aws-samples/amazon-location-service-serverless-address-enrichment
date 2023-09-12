@@ -25,7 +25,7 @@ def lambda_handler(event, context):
     status = response.get("ResponseMetadata", {}).get("HTTPStatusCode")
     if status == 200:
         print(f"Successful S3 get_object response. Status - {status}")
-        data = pd.read_csv(response.get("Body")).dropna(thresh=2)
+        data = pd.read_csv(response.get("Body")).dropna(thresh=1)
         data = data.rename(columns=str.title)
         columns = data.columns
         Countries = []
@@ -38,7 +38,7 @@ def lambda_handler(event, context):
         Regions = []
         SubRegions = []
         Municipalities = []
-        Zipcodes = []
+        PostalCodes = []
         Relevances = []
         ###########################
         #     ReverseGeocoder     #
@@ -59,10 +59,10 @@ def lambda_handler(event, context):
                 except:
                     Countries.append("")
                 try:
-                    Zipcode = (json_response[0]["Place"]["PostalCode"])
-                    Zipcodes.append(Zipcode)
+                    PostalCode = (json_response[0]["Place"]["PostalCode"])
+                    PostalCodes.append(PostalCode)
                 except:
-                    Zipcodes.append("")
+                    PostalCodes.append("")
                 try:
                     Point = (json_response[0]["Place"]["Geometry"]["Point"])
                     Points.append(Point)
@@ -113,7 +113,7 @@ def lambda_handler(event, context):
                     print("Error: SubRegion unavailable for given input in row", (len(Points)) + 1)
     
             data["Points"] = Points
-            data["Zipcode"] = Zipcodes
+            data["PostalCode"] = PostalCodes
             #data["Latitude"] = Latitude
             #data["Longitude"] = Longitude
             data["Label"] = Labels

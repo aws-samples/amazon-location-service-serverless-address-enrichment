@@ -146,7 +146,7 @@ def lambda_handler(event, context):
         #########################################################
         #     Geocoder  (for different possible column labels)  #
         #########################################################
-        elif "Address" in columns:
+        elif "Address" and "Street" and "State" and "Zip" in columns:
             for index, row in data.iterrows():
                 try:
                     json_response = ""
@@ -258,7 +258,7 @@ def lambda_handler(event, context):
             data["CountryCode"] = Countries
             data["Interpolated"] = Interpolates
             data["Categories"] = Categories
-        elif "Street" in columns:
+        elif "Street" and "City" and "State" in columns:
             for index, row in data.iterrows():
                 try:
                     json_response = ""
@@ -457,6 +457,138 @@ def lambda_handler(event, context):
             # data["Points"] = Points
             data["Latitude"] = Latitude
             data["Longitude"] = Longitude
+            data["Street"] = Streets
+            data["Municipality"] = Municipalities
+            data["Neighborhood"] = Neighborhoods
+            data["Region"] = Regions
+            data["SubRegion"] = SubRegions
+            data["PostalCode"] = PostalCodes
+            data["CountryCode"] = Countries
+            data["Interpolated"] = Interpolates
+            data["Categories"] = Categories
+        elif "Addressline" in columns:
+            for index, row in data.iterrows():
+                try:
+                    json_response = ""
+                    if 'Country' in columns and pd.isna(row.Country) == False:
+                        response = location.search_place_index_for_text(
+                            IndexName=location_index,
+                            Text= row.Addressline,
+                            FilterCountries=[str(row.Country)])
+                    else:
+                        response = location.search_place_index_for_text(
+                            IndexName=location_index,
+                            Text= row.Addressline)
+                    json_response = response["Results"]
+                    if (len(json_response) == 0):
+                        print (f"Error: No results for record {index} {row.Addressline}")
+                        Countries.append("")
+                        Points.append("")
+                        Longitude.append("")
+                        Latitude.append("")
+                        Labels.append("")
+                        AddressNumbers.append("")
+                        Streets.append("")
+                        Municipalities.append("")
+                        Regions.append("")
+                        SubRegions.append("")
+                        PostalCodes.append("")
+                        Relevances.append("")
+                        Interpolates.append("")
+                        Categories.append("")
+                        continue
+                    else:
+                        print(f"Results for {index} {len(json_response)} {json_response}")
+                except:
+                    print("API Response Error")
+                try:
+                    CountryCode = (json_response[0]["Place"]["Country"])
+                    Countries.append(CountryCode)
+                except:
+                    Countries.append("")
+                try:
+                    Point = (json_response[0]["Place"]["Geometry"]["Point"])
+                    Points.append(Point)
+                except:
+                    Points.append("")
+                try:
+                    Longitude.append(Point[0])
+                    Latitude.append(Point[1])
+                except:
+                    Longitude.append("")
+                    Latitude.append("")
+                    print("Error: Lat/Lon unavailable for given input in row", (len(Points)) + 1)
+                try:
+                    Label = (json_response[0]["Place"]["Label"])
+                    Labels.append(Label)
+                except:
+                    Labels.append("")
+                    print("Error: Address unavailable for given input in row", (len(Points)) + 1)
+                try:
+                    AddressNumber = (json_response[0]["Place"]["AddressNumber"])
+                    AddressNumbers.append(AddressNumber)
+                except:
+                    AddressNumbers.append("")
+                try:
+                    Street = (json_response[0]["Place"]["Street"])
+                    Streets.append(Street)
+                except:
+                    Streets.append("")
+                try:
+                    if "Municipality" in (json_response[0]["Place"]):
+                        Municipality = (json_response[0]["Place"]["Municipality"])
+                        Municipalities.append(Municipality)
+                    else:
+                        Municipalities.append("")
+                except:
+                    Municipalities.append("")
+                try:
+                    Neighborhood = (json_response[0]["Place"]["Neighborhood"])
+                    Neighborhoods.append(Neighborhood)
+                except:
+                    Neighborhoods.append("")
+                try:
+                    Region = (json_response[0]["Place"]["Region"])
+                    Regions.append(Region)
+                except:
+                    Regions.append("")
+                    print("Error: Region unavailable for given input in row", (len(Points)) + 1)
+                try:
+                    SubRegion = (json_response[0]["Place"]["SubRegion"])
+                    SubRegions.append(SubRegion)
+                except:
+                    SubRegions.append("")
+                    print("Error: SubRegion unavailable for given input in row", (len(Points)) + 1)
+                try:
+                    PostalCode = (json_response[0]["Place"]["PostalCode"])
+                    PostalCodes.append(PostalCode)
+                except:
+                    PostalCodes.append("")
+                try:
+                    Relevance = (json_response[0]["Relevance"])
+                    Relevances.append(Relevance)
+                except:
+                    Relevances.append("")
+                    print("Error: Relevance unavailable for given input in row", (len(Points)) + 1)
+                try:
+                    Interpolate = (json_response[0]["Place"]["Interpolated"])
+                    Interpolates.append(Interpolate)
+                except:
+                    Interpolates.append("")
+                    print("Error: Interpolated unavailable for given input in row", (len(Points)) + 1)
+                try:
+                    Category = (json_response[0]["Place"]["Categories"])
+                    Categories.append(Category)
+                except:
+                    Categories.append("")
+                    print("Error: Categories unavailable for given input in row", (len(Points)) + 1)
+    
+            data["Relevance"] = Relevances
+            data["Label"] = Labels
+            # data["Points"] = Points
+            data["Latitude"] = Latitude
+            data["Longitude"] = Longitude
+            data["AddressNumber"] = AddressNumbers
             data["Street"] = Streets
             data["Municipality"] = Municipalities
             data["Neighborhood"] = Neighborhoods

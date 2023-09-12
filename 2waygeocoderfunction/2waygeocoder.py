@@ -146,7 +146,7 @@ def lambda_handler(event, context):
         #########################################################
         #     Geocoder  (for different possible column labels)  #
         #########################################################
-        elif "Address" and "Street" and "State" and "Zip" in columns:
+        elif "Address" and "City" and "State" and "Zip" in columns:
             for index, row in data.iterrows():
                 try:
                     json_response = ""

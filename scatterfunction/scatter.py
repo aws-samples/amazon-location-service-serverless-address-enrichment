@@ -23,8 +23,8 @@ def lambda_handler(event, context):
     source_bucket = event['Records'][0]['s3']['bucket']['name']
     source_object = urllib.parse.unquote_plus(event['Records'][0]['s3']['object']['key'], encoding='utf-8')
     response = s3_client.get_object(Bucket=source_bucket, Key=source_object)
-    data = pd.read_csv(response.get("Body"))
-    df = data.dropna(thresh=2)
+    data = pd.read_csv(response.get("Body"),quotechar="'",escapechar="\\")
+    df = data.dropna(thresh=1)
 
     # break up the dataset into x number of shards (to avoid the default 50 Request Per Second API Throtling restrictions for AWS Location Service, this is left at 4)
     data_set_size = round(len(df))
